@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Neon Tunnel Rush</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#05000f">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;overflow:hidden;background:#05000f;color:#0ff;font-family:'Courier New',ui-monospace,monospace;touch-action:none}
+[hidden]{display:none!important}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#flash{position:fixed;inset:0;pointer-events:none;opacity:0}
+#flash.near{animation:fn .35s}#flash.crash{animation:fc .6s}
+@keyframes fn{0%{opacity:.6;box-shadow:inset 0 0 90px 25px #f0f}100%{opacity:0}}
+@keyframes fc{0%{opacity:.7;background:#f03}100%{opacity:0}}
+#hud{position:fixed;top:max(10px,env(safe-area-inset-top));left:14px;right:14px;display:flex;gap:10px;align-items:center;pointer-events:none;font-size:13px;letter-spacing:.08em;text-shadow:0 0 8px #0ff}
+.bar{flex:1;height:6px;border:1px solid #0ff;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0ff,#f0f)}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;background:rgba(5,0,15,.55);text-align:center;overflow:auto}
+#over{background:rgba(5,0,15,.3)}
+h1{font-size:clamp(30px,8vw,66px);margin:0 0 10px;letter-spacing:.1em;color:#fff;text-shadow:0 0 10px #0ff,0 0 30px #f0f,3px 3px 0 #f0f;line-height:1}
+h1 small{display:block;font-size:.3em;color:#f0f;letter-spacing:.45em;margin-top:8px;text-shadow:none}
+h2{margin:0 0 6px;font-size:clamp(22px,5vw,36px);color:#fff;text-shadow:0 0 12px #f0f;letter-spacing:.1em}
+p{margin:0;opacity:.85}
+.btn{font:inherit;font-size:18px;letter-spacing:.12em;color:#0ff;background:rgba(0,255,255,.07);border:2px solid #0ff;border-radius:6px;padding:12px 28px;min-width:230px;cursor:pointer;text-transform:uppercase;box-shadow:0 0 12px rgba(0,255,255,.45),inset 0 0 12px rgba(0,255,255,.2)}
+.btn:hover,.btn:active,.btn.on{background:#0ff;color:#05000f}
+.btn.sm{min-width:0;padding:8px 16px;font-size:14px}
+.btn.alt{color:#f0f;border-color:#f0f;box-shadow:0 0 12px rgba(255,0,255,.45),inset 0 0 12px rgba(255,0,255,.2)}
+.btn.alt:hover,.btn.alt:active{background:#f0f;color:#05000f}
+#grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;width:min(580px,100%)}
+.btn.lv{--c:#0ff;min-width:0;display:flex;flex-direction:column;gap:4px;color:var(--c);border-color:var(--c);padding:12px 6px;font-size:13px;text-transform:none}
+.btn.lv b{font-size:28px}.btn.lv em{font-style:normal;opacity:.8}
+.btn.lv:hover{background:var(--c);color:#05000f}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+label{display:flex;gap:10px;align-items:center;font-size:16px}
+input[type=range]{accent-color:#f0f;width:160px}
+@media(max-height:480px){.screen{gap:6px}h1{font-size:30px;margin:0}h1 small{display:none}.btn{padding:8px 20px;font-size:15px}}
+</style></head><body>
+<canvas id="c"></canvas><div id="flash"></div>
+<div id="hud" hidden><span id="lname"></span><div class="bar"><i id="prog"></i></div><span id="pct">0%</span></div>
+
+<div class="screen" id="main">
+ <h1>NEON TUNNEL<small>RUSH</small></h1>
+ <button class="btn" id="bClassic">Classic Mode</button>
+ <button class="btn" id="bLevels">Levels</button>
+ <button class="btn" id="bSet">Settings</button>
+ <button class="btn alt" id="install" hidden>Install app</button>
+ <p>Arrows / A D or drag to steer</p>
+</div>
+<div class="screen" id="levels" hidden>
+ <h2>Select level</h2><div class="row" id="diffs"></div><div id="grid"></div>
+ <button class="btn sm alt" data-back>Back</button>
+</div>
+<div class="screen" id="settings" hidden>
+ <h2>Settings</h2>
+ <label>Steering sensitivity <input type="range" id="sens" min=".5" max="2" step=".1"></label>
+ <label><input type="checkbox" id="shake"> Camera shake and pulse</label>
+ <button class="btn sm" id="reset">Reset best scores</button>
+ <button class="btn sm alt" data-back>Back</button>
+</div>
+<div class="screen" id="over" hidden>
+ <h2 id="ovTitle"></h2><p id="ovInfo"></p>
+ <div class="row"><button class="btn" id="retry">Retry</button><button class="btn" id="next" hidden>Next level</button><button class="btn alt" id="menu">Menu</button></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="game.js"></script>
+</body></html>
